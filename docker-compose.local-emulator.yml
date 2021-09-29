@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  account-api:
+    build:
+      context: ./
+    ports:
+      - "8081:8081"
+    environment:
+      - FLOW_PORT=8081
+      - FLOW_CREATORADDRESS=f8d6e0586b0a20c7
+      - FLOW_CREATORPRIVATEKEY=80e33e205b8458f895b25cbd57bc3680e26bcecfeb737fbdaea485c053513089
+      - FLOW_CREATORKEYINDEX=0
+      - FLOW_CREATORKEYSIGALGO=ECDSA_P256
+      - FLOW_CREATORKEYHASHALGO=SHA3_256
+      - FLOW_ACCESSAPIHOST=host.docker.internal:3569

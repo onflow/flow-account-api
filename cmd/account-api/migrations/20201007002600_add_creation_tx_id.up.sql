@@ -1,0 +1,1 @@
+ALTER TABLE accounts ADD COLUMN creation_tx_id TEXT;

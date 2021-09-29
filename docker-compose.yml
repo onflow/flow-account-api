@@ -1,0 +1,54 @@
+version: "3.7"
+services:
+  account-api:
+    build:
+      context: .
+      dockerfile: ./cmd/account-api/Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8081:8080"
+    environment:
+      - FLOW_PORT=8080
+      - FLOW_ENVIRONMENT=test
+      - FLOW_CREATORADDRESS=f8d6e0586b0a20c7
+      - FLOW_CREATORPRIVATEKEY=80e33e205b8458f895b25cbd57bc3680e26bcecfeb737fbdaea485c053513089
+      - FLOW_CREATORKEYINDEX=0
+      - FLOW_CREATORKEYSIGALGO=ECDSA_P256
+      - FLOW_CREATORKEYHASHALGO=SHA3_256
+      - FLOW_ACCESSAPIHOST=emulator:3569
+      # Admin
+      - FLOW_ADMINPUBLICKEY=
+      - FLOW_ADMINKEYSIGALGO=ECDSA_P256
+      - FLOW_ADMINKEYHASHALGO=SHA3_256
+      # Postgres Config
+      - FLOW_POSTGRESQLHOST=postgres
+      - FLOW_POSTGRESQLPORT=5433
+      - FLOW_POSTGRESQLDATABASE=account-api
+      - FLOW_POSTGRESQLUSERNAME=postgres
+      - FLOW_POSTGRESQLPASSWORD=password
+      - FLOW_POSTGRESQLSSL=false
+      - FLOW_POSTGRESQLPOOLSIZE=1
+      - FLOW_POSTGRESPROMETHEUSSUBSYSTEM=account_api_dal
+      - FLOW_POSTGRESLOGGERPREFIX=account_api_dal
+      - FLOW_POSTGRESLOCALSQLMIGRATIONPATH=/data/migrations
+
+  postgres:
+    image: postgres:11
+    environment:
+      - POSTGRES_DB=account-api
+      - POSTGRES_PORT=5433
+      - POSTGRES_PASSWORD=password
+    command: postgres -c log_statement=all -c log_min_duration_statement=0 -p 5433
+    ports:
+      - "5433:5433"
+
+  emulator:
+    image: gcr.io/flow-container-registry/emulator:v0.23.0
+    ports:
+      - "8080:8080"
+      - "3569:3569"
+    environment:
+      - FLOW_SERVICEPRIVATEKEY=80e33e205b8458f895b25cbd57bc3680e26bcecfeb737fbdaea485c053513089
+      - FLOW_SERVICEKEYSIGALGO=ECDSA_P256
+      - FLOW_SERVICEKEYHASHALGO=SHA3_256
